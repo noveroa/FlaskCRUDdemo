@@ -11,11 +11,11 @@
 
 - Create / Edit / Delete Career in Career Table with admin rights
 
-![ScreenShot](/screenshots/ViewCareer.png)
-![ScreenShot](/screenshots/CareerCrud.png)
+![ScreenShot](/screenshots/ViewCareers.png)
+![ScreenShot](/screenshots/CareersCrud.png)
 
 - View and Assign Users with admin rights
-![ScreenShot](/screenshots/View Employees.png)
+![ScreenShot](/screenshots/View \Employees.png)
 
 ## Login/ Logout
 ![ScreenShot](/screenshots/loginlogout.png)
@@ -29,16 +29,15 @@
 ## Test.py
 ![ScreenShot](/screenshots/test.png)
 
-To run:
+- To run:
+- - export FLASK_APP=run.pyexport
+- - expo export FLASK_APP=run.py
+- - flask run
 
-$ export FLASK_APP=run.pyexport
-$ expo export FLASK_APP=run.py
-$ flask run
-
-database migrations and updates
-$ flask db init
-$ flask db migrate
-$ flask db upgrade
+- database migrations and updates
+- - flask db init
+- - flask db migrate
+- -  flask db upgrade
 
 
 
