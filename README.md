@@ -3,7 +3,7 @@
 
 # A small flask web app with:
 
-# Linked to A mySql Database
+## Linked to mySql Database
 ![ScreenShot](/screenshots/sql.png)
 
 ## Admin Users
@@ -15,7 +15,7 @@
 ![ScreenShot](/screenshots/CareersCrud.png)
 
 - View and Assign Users with admin rights
-![ScreenShot](/screenshots/View \Employees.png)
+![ScreenShot](/screenshots/ViewEmployees.png)
 
 ## Login/ Logout
 ![ScreenShot](/screenshots/loginlogout.png)
@@ -31,13 +31,13 @@
 
 - To run:
 - - export FLASK_APP=run.pyexport
-- - expo export FLASK_APP=run.py
+- - export FLASK_APP=run.py
 - - flask run
 
 - database migrations and updates
 - - flask db init
 - - flask db migrate
-- -  flask db upgrade
+- - flask db upgrade
 
 
 
