@@ -22,10 +22,10 @@ class User(UserMixin, db.Model):
     last_name = db.Column(db.String(60), index=True)
     password_hash = db.Column(db.String(128))
     subject_id = db.Column(db.Integer, db.ForeignKey('careers.id'))
+    subject = db.relationship('Career', backref='career')
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
     is_admin = db.Column(db.Boolean, default=False)
-    notes = db.relationship('Note', backref='user',
-                                 lazy='dynamic')
+    notes = db.relationship('Note', lazy='select', backref=db.backref('user', lazy='joined'))
 
     def __repr__(self):
         return '<Career Field: {}>'.format(self.name)
@@ -52,6 +52,26 @@ class User(UserMixin, db.Model):
     def __repr__(self):
         return '<Name: {}>'.format(self.username)
 
+
+    def serialize(self):
+        """Return object data in easily serializeable format"""
+        return {
+            'User ID' : self.id,
+            'Email':  self.email,
+            'Username': self.username,
+            'First Name': self.first_name,
+            'Last Name' : self.last_name,
+            'CareerField': self.career.name,
+            'Role': self.role.name
+            }
+
+def dump_datetime(value):
+        """Deserialize datetime object into string form for JSON processing."""
+        if value is None:
+            return None
+        return [value.strftime("%Y-%m-%d"), value.strftime("%H:%M:%S")]
+
+
 # Set up user_loader
 @login_manager.user_loader
 def load_user(user_id):
@@ -67,11 +87,20 @@ class Career(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(60), unique=True)
     description = db.Column(db.String(200))
-    users = db.relationship('User', backref='career',
-                                lazy='dynamic')
+    users = db.relationship('User', backref='career', lazy='dynamic')
 
     def __repr__(self):
         return '<Career Field: {}>'.format(self.name)
+
+    def serialize(self):
+        """Return object data in easily serializeable format"""
+        return {
+            'Career ID' : self.id,
+            'name':  self.name,
+            'Description': self.description,
+            'Roles Included': [u.role.name for u in self.users],
+            'Users' : [u.username for u in self.users]
+            }
 
 class Role(db.Model):
     """
@@ -83,11 +112,19 @@ class Role(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(60), unique=True)
     description = db.Column(db.String(200))
-    users = db.relationship('User', backref='role',
-                                lazy='dynamic')
+    users = db.relationship('User', backref='role', lazy='dynamic')
 
     def __repr__(self):
         return '<Role: {}>'.format(self.name)
+
+    def serialize(self):
+        """Return object data in easily serializeable format"""
+        return {
+            'Role ID' : self.id,
+            'name':  self.name,
+            'Description': self.description,
+            'Users' : [u.username for u in self.users]
+            }
 
 class Note(db.Model):
 
@@ -95,7 +132,8 @@ class Note(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(80))
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
+    body = db.Column(db.Text)
 
     def __init__(self, title, body):
         self.title = title
@@ -103,3 +141,12 @@ class Note(db.Model):
 
     def __repr__(self):
         return '<Note: {0}\n{1}>'.format(self.title, self.body)
+
+    def serialize(self):
+        """Return object data in easily serializeable format"""
+        return {
+            'Note ID' : self.id,
+            'Title':  self.title,
+            'Description': self.body,
+            'User' : self.user.username
+            }

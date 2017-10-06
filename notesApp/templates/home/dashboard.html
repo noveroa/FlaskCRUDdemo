@@ -9,10 +9,12 @@
                     <h1>NoteTaking Dashboard</h1>
                     <h3></h3>
                     <hr class="intro-divider">
-                    </ul>
                 </div>
             </div>
         </div>
     </div>
+     <h2><a href="{{ url_for('home.viewtables') }}">Search the DataBase Tables</a></h2>
+     <h2><a href="{{ url_for('user.list_notes') }}">View, Edit, Add, and Delete Your Notes</a></h2>
+     <h2><a href="{{ url_for('user.viewprofile') }}">View and Edit Your Profile</a></h2>
 </div>
 {% endblock %}

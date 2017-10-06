@@ -47,6 +47,8 @@ def create_app(config_name):
     from .home import home as home_blueprint
     app.register_blueprint(home_blueprint)
 
+    from .user import user as user_blueprint
+    app.register_blueprint(user_blueprint)
 
 
     # Custom Error Handling
@@ -58,15 +60,28 @@ def create_app(config_name):
 
     @app.errorhandler(404)
     def page_not_found(error):
+        logError(True)
         return render_template('errors/404.html', title='Page Not Found'), 404
 
     @app.errorhandler(500)
     def internal_server_error(error):
+        logError(True)
         return render_template('errors/500.html', title='Server Error'), 500
 
     @app.route('/500')
     def error():
+        logError(True)
         abort(500)
+
+    def logError(start):
+        #   Explicitely Prints error to the errorlog. @/var/log/apache2/error.log
+        assert start
+        import traceback, sys, StringIO
+        err = sys.stderr
+        buffer = sys.stderr = StringIO.StringIO()
+        traceback.print_exc()
+        sys.stderr = err
+        print buffer.getvalue()
 
 
     return app
