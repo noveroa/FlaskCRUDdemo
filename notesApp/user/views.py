@@ -36,9 +36,11 @@ def list_notes():
     List all roles
     """
     user = current_user
+    try:
+        notes = user.notes
+    except:
+        notes = False
 
-    notes = user.notes
-    role = user.role.name
     return render_template('user/notes.html', user=user,
                            notes=notes, title='Notes')
 
